@@ -10,6 +10,25 @@
 
 ## Arquitetura
 
+#### Layered Architecture
+```
+transferencia-app/
+│
+├── controllers/           # Controller
+│   └── TransactionController.java
+├── repositories/          # Repository
+│   └── TransactionRepository.java
+├── services/              # Service
+│   └── TransactionService.java
+├── domain/                # Entity / Domain Objects
+│   └── Transaction.java
+├── exception/             # Exceptions
+│   └── TransactionException.java
+│   └── GlobalExceptionHandler.java
+├── utils/                 # Utils
+│   └── WebClientUtils.java
+```
+
 #### Desenho da solução
 ![Desenho da solução](.docs/System-design.png)
 
