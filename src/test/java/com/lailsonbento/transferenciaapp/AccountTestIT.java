@@ -1,4 +1,4 @@
-package com.lailsonbento.transferenciaapp.integration;
+package com.lailsonbento.transferenciaapp;
 
 import com.lailsonbento.transferenciaapp.domain.Account;
 import com.lailsonbento.transferenciaapp.domain.AccountType;
@@ -9,17 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@SpringBootTest(webEnvironment = RANDOM_PORT)
-@ActiveProfiles("test")
-class TransferenciaAppApplicationTests {
+public class AccountTestIT {
 
     private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(2);
     private static final BigDecimal ONE_HUNDRED = new BigDecimal(100).setScale(2);

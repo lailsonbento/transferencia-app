@@ -1,4 +1,4 @@
-package com.lailsonbento.transferenciaapp.unit;
+package com.lailsonbento.transferenciaapp;
 
 import com.lailsonbento.transferenciaapp.domain.Account;
 import com.lailsonbento.transferenciaapp.domain.AccountType;
@@ -6,11 +6,14 @@ import com.lailsonbento.transferenciaapp.domain.User;
 import com.lailsonbento.transferenciaapp.exceptions.AccountException;
 import com.lailsonbento.transferenciaapp.exceptions.InsufficientBalanceException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SpringExtension.class)
 public class AccountTest {
 
     private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(2);
