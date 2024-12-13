@@ -1,4 +1,4 @@
-package com.lailsonbento.transferenciaapp;
+package com.lailsonbento.transferenciaapp.account;
 
 import com.lailsonbento.transferenciaapp.domain.Account;
 import com.lailsonbento.transferenciaapp.domain.AccountType;
