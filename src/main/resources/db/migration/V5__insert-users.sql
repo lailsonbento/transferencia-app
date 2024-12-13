@@ -1,0 +1,2 @@
+INSERT INTO users (full_name, document, email) VALUES ('Lailson Bento', '12345678912', 'lailsonbento@me.com');
+INSERT INTO users (full_name, document, email) VALUES ('Mercearia Jao', '12345678912345', 'jaomercearia@me.com')
