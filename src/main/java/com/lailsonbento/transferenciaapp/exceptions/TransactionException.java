@@ -2,5 +2,7 @@ package com.lailsonbento.transferenciaapp.exceptions;
 
 public class TransactionException extends RuntimeException {
 
-    public TransactionException(String message) {}
+    public TransactionException(String message) {
+        super(message);
+    }
 }
