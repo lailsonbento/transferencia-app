@@ -20,11 +20,11 @@ public class Transaction {
 
     private BigDecimal value;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "from_account_id", updatable = false, nullable = false)
     private Account fromAccount;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "to_account_id", updatable = false, nullable = false)
     private Account toAccount;
 
