@@ -38,7 +38,7 @@ transferencia-app/
 
 ## API
 
-- POST http://localhost:8080/transaction
+- POST http://localhost:8080/api/transaction
 
 ```json
 {
