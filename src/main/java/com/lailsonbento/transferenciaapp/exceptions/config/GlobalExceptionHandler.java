@@ -21,12 +21,7 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .toList();
         var message = String.join(",\n", errors);
-        return getApiErrorResponseResponseEntity(HttpStatus.BAD_REQUEST, message, ex, request);
-    }
-
-    @ExceptionHandler({ Exception.class, RuntimeException.class })
-    public ResponseEntity<ApiErrorResponse> handleException(Exception ex, HttpServletRequest request) {
-        return getApiErrorResponseResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, ex, request);
+        return getApiErrorResponseResponseEntity(HttpStatus.BAD_REQUEST, message, request);
     }
 
     @ExceptionHandler({ AccountException.class, AccountNotFoundException.class, InsufficientBalanceException.class })
@@ -44,14 +39,17 @@ public class GlobalExceptionHandler {
         return getApiErrorResponseResponseEntity(HttpStatus.FORBIDDEN, ex, request);
     }
 
+    @ExceptionHandler({ Exception.class })
+    public ResponseEntity<ApiErrorResponse> handleException(Exception ex, HttpServletRequest request) {
+        return getApiErrorResponseResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, ex, request);
+    }
+
     private ResponseEntity<ApiErrorResponse> getApiErrorResponseResponseEntity(HttpStatus status, Exception ex, HttpServletRequest request) {
-        log.error("Exception occurred {}", ex.getMessage(), ex);
         var apiError = new ApiErrorResponse(ex.getMessage(), status.value(), request.getServletPath());
         return new ResponseEntity<>(apiError, status);
     }
 
-    private ResponseEntity<ApiErrorResponse> getApiErrorResponseResponseEntity(HttpStatus status, String message, Exception ex, HttpServletRequest request) {
-        log.error("Exception occurred {}", ex.getMessage(), ex);
+    private ResponseEntity<ApiErrorResponse> getApiErrorResponseResponseEntity(HttpStatus status, String message, HttpServletRequest request) {
         var apiError = new ApiErrorResponse(message, status.value(), request.getServletPath());
         return new ResponseEntity<>(apiError, status);
     }

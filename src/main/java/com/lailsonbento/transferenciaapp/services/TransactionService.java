@@ -3,17 +3,16 @@ package com.lailsonbento.transferenciaapp.services;
 import com.lailsonbento.transferenciaapp.domain.TransactionRequest;
 import com.lailsonbento.transferenciaapp.domain.User;
 import com.lailsonbento.transferenciaapp.exceptions.AccountNotFoundException;
-import com.lailsonbento.transferenciaapp.exceptions.TransactionException;
 import com.lailsonbento.transferenciaapp.exceptions.TransactionNotAuthorizedException;
 import com.lailsonbento.transferenciaapp.repositories.AccountRepository;
 import com.lailsonbento.transferenciaapp.repositories.TransactionRepository;
 import com.lailsonbento.transferenciaapp.utils.WebClientUtils;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.orm.hibernate5.HibernateOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,6 +24,7 @@ import reactor.core.publisher.Mono;
 public class TransactionService {
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+    private final EntityManager entityManager;
 
     @Value("${app.authorization.url}")
     private String authorizationUrl;
@@ -41,19 +41,12 @@ public class TransactionService {
 
         authorizeTransaction();
 
-        try {
-            log.info("Transfering {} from {} to {}", request.value(), fromAccount, toAccount);
-            var transaction = fromAccount.transferTo(toAccount, request.value());
+        log.info("Transfering {} from {} to {}", request.value(), fromAccount, toAccount);
+        var transaction = fromAccount.transferTo(toAccount, request.value());
 
-            transactionRepository.save(transaction);
-            log.info("Transaction saved {}", transaction);
-        } catch (Exception e) {
-            if (e instanceof HibernateOptimisticLockingFailureException) {
-                log.error("Concurrent transaction occurred {}", request);
-                log.error(e.getMessage(), e);
-            }
-            throw new TransactionException("Transaction failed. Try again later");
-        }
+        transactionRepository.save(transaction);
+        entityManager.flush();
+        log.info("Transaction saved {}", transaction);
 
         notifyUsers(fromAccount.getUser(), toAccount.getUser());
     }
@@ -79,6 +72,5 @@ public class TransactionService {
             log.error("Error when notifying users {}, {}", payer, payee);
             log.error(e.getMessage(), e);
         }
-
     }
 }
