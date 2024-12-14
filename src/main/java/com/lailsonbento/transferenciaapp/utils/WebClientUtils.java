@@ -3,6 +3,7 @@ package com.lailsonbento.transferenciaapp.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -20,10 +21,8 @@ public class WebClientUtils {
                 .method(httpMethod)
                 .bodyValue(body)
                 .retrieve()
-                .onStatus(HttpStatusCode::is5xxServerError, _ -> {
-                    log.error("Error when performing http request");
-                    log.error("{} {}", httpMethod.name(), url);
-                    body.ifPresent(b -> log.error("Body: {}", b));
+                .onStatus(HttpStatusCode::is5xxServerError, response -> {
+                    logResponse(url, httpMethod, body, response);
                     return Mono.error(new RuntimeException("Error when performing http request"));
                 })
                 .bodyToMono(clazz)
@@ -31,6 +30,15 @@ public class WebClientUtils {
                 .filter(throwable -> throwable instanceof RuntimeException))
                 .subscribeOn(Schedulers.single())
                 .toFuture();
+    }
+
+    private static void logResponse(String url, HttpMethod httpMethod, Optional<String> body, ClientResponse response) {
+        log.error("{} {}", httpMethod.name(), url);
+        body.ifPresent(b -> log.error("Body: {}", b));
+        log.error("Status: {}", response.statusCode());
+        response.bodyToMono(String.class)
+                .publishOn(Schedulers.boundedElastic())
+                .subscribe(responseBody -> log.error("Response body: {}", responseBody));
     }
 
     public static <R> CompletableFuture<R> doAsync(String url, HttpMethod httpMethod, Class<R> clazz) {
