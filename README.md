@@ -42,8 +42,8 @@ transferencia-app/
 
 ```json
 {
-    "toAccount": 1,
-    "fromAccount": 2,
+    "payerId": 1,
+    "payeeId": 2,
     "value": 100.0
 }
 ```
