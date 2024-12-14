@@ -29,9 +29,6 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private AccountType accountType = AccountType.USER;
 
-    @Version
-    private Long version;
-
     public Account(User user, AccountType accountType, BigDecimal balance) {
         this.balance = balance;
         this.user = user;
@@ -90,5 +87,15 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(id, user);
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", balance=" + balance +
+                ", user=" + user +
+                ", accountType=" + accountType +
+                '}';
     }
 }

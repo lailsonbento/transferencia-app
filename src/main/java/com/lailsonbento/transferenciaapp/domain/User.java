@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.math.BigDecimal;
-
-
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
