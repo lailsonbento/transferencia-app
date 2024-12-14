@@ -34,10 +34,10 @@ public class TransactionService {
 
     @Transactional
     public void transfer(TransactionRequest request) {
-        var fromAccount = accountRepository.findById(request.fromAccount())
-                .orElseThrow(() -> new AccountNotFoundException(String.format("Payer %s not found", request.fromAccount())));
-        var toAccount = accountRepository.findById(request.toAccount())
-                .orElseThrow(() -> new AccountNotFoundException(String.format("Payee %s not found", request.toAccount())));
+        var fromAccount = accountRepository.findById(request.payerId())
+                .orElseThrow(() -> new AccountNotFoundException(String.format("Payer id %s not found", request.payerId())));
+        var toAccount = accountRepository.findById(request.payeeId())
+                .orElseThrow(() -> new AccountNotFoundException(String.format("Payee id %s not found", request.payeeId())));
 
         authorizeTransaction();
 

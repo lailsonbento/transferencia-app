@@ -10,7 +10,7 @@ public record TransactionRequest(
         @Positive(message = "Value must be positive")
         BigDecimal value,
         @NotNull(message = "Payer ID is required")
-        Long fromAccount,
+        Long payerId,
         @NotNull(message = "Payee ID is required")
-        Long toAccount
+        Long payeeId
 ) {}
