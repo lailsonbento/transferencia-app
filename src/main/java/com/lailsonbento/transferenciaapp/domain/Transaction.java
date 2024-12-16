@@ -20,11 +20,11 @@ public class Transaction {
 
     private BigDecimal value;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne
     @JoinColumn(name = "from_account_id", updatable = false, nullable = false)
     private Account fromAccount;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne
     @JoinColumn(name = "to_account_id", updatable = false, nullable = false)
     private Account toAccount;
 
@@ -35,5 +35,16 @@ public class Transaction {
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", value=" + value +
+                ", fromAccount=" + fromAccount +
+                ", toAccount=" + toAccount +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

@@ -39,10 +39,10 @@ public class TransactionService {
         var toAccount = accountRepository.findById(request.payeeId())
                 .orElseThrow(() -> new AccountNotFoundException(String.format("Payee id %s not found", request.payeeId())));
 
-        authorizeTransaction();
-
         log.info("Transfering {} from {} to {}", request.value(), fromAccount, toAccount);
         var transaction = fromAccount.transferTo(toAccount, request.value());
+
+        authorizeTransaction();
 
         transactionRepository.save(transaction);
         entityManager.flush();
