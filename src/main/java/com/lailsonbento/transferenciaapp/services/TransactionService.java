@@ -7,7 +7,6 @@ import com.lailsonbento.transferenciaapp.exceptions.TransactionNotAuthorizedExce
 import com.lailsonbento.transferenciaapp.repositories.AccountRepository;
 import com.lailsonbento.transferenciaapp.repositories.TransactionRepository;
 import com.lailsonbento.transferenciaapp.utils.WebClientUtils;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +23,6 @@ import reactor.core.publisher.Mono;
 public class TransactionService {
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
-    private final EntityManager entityManager;
 
     @Value("${app.authorization.url}")
     private String authorizationUrl;
@@ -44,8 +42,7 @@ public class TransactionService {
 
         authorizeTransaction();
 
-        transactionRepository.save(transaction);
-        entityManager.flush();
+        transactionRepository.saveAndFlush(transaction);
         log.info("Transaction saved {}", transaction);
 
         notifyUsers(fromAccount.getUser(), toAccount.getUser());
